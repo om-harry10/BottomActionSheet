@@ -18,12 +18,12 @@ function  ActSheet() {
     
     
       handleOpen=()=>{
-        // Animated.timing(translationY, {
-        //   toValue: 0,
-        //   duration: 3000,
-        //   useNativeDriver: true,
-        // }).start();
-        console.log("this is TouchableOpacity");
+        Animated.timing(translationY, {
+          toValue: 0,
+          duration: 3000,
+          useNativeDriver: true,
+        }).start();
+        //console.log("this is TouchableOpacity");
       };
    
     return(
