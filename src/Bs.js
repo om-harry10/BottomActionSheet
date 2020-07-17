@@ -1,56 +1,65 @@
-import React, { Component } from "react";
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import React, { useState } from "react";
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions,Animated} from 'react-native';
 import {Image} from 'react-native-elements';
-import Animated, {Value, cond, eq, set, useCode} from 'react-native-reanimated';
+
 import {TapGestureHandler, State} from 'react-native-gesture-handler';
 
-// const state= new Value(State.UNDETERMINED);
-// const  gestureHandler={onHandlerStateChange:Animated.event([{nativeEvent:{state},},]),}
-// useCode(()=>
-    // cond(eq(state,State.END),
-    //     cond(eq(translationY,300),set(translationY,0),set(translationY,300)),
-    // ),
-    // );
+
 
 const{width}=Dimensions.get('window');
-const translationY= new Value(300);
+const translationY= new Animated.Value(300);
 function  ActSheet() {
     
+    const [showSheet, setShowSheet]=useState(true);
     
-      handleOpen=()=>{
+      const handleOpen=()=>{
         Animated.timing(translationY, {
           toValue: 0,
-          duration: 3000,
+          duration: 500,
           useNativeDriver: true,
         }).start();
-        //console.log("this is TouchableOpacity");
+        setShowSheet(false);
+        console.log("this is TouchableOpacity1");
+      };
+
+      
+      const handleClose=()=>{
+        Animated.timing(translationY, {
+          toValue: 300,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+        setShowSheet(true);
+        console.log("this is TouchableOpacity2");
       };
    
     return(
+        <TouchableOpacity onPress={ showSheet?null:()=>handleClose()}>
         <View style={{height:'100%',width:'100%'}}>
-           <TapGestureHandler  >
-            <Animated.View>  
+           
                     <TouchableOpacity style={styles.button} 
-                        onPress={()=>handleOpen()}>
+                        onPress={showSheet?()=>handleOpen():null}>
                         <Text style={{color:'#fff'}}>Click me</Text>
                         
                     </TouchableOpacity>
-                    </Animated.View> 
-            </TapGestureHandler>
+                 
             <View style={{flex:1, justifyContent:'center',  }}>
                 
                 <Image source={require('./images/i1.jpg')} style={styles.image}/>
             </View>
-            <TapGestureHandler >
-            <Animated.View style={{...StyleSheet.absoluteFill,backgroundColor:"rgb(0,0,0,0.5)",
-                        zIndex:-1,}}/>
-            </TapGestureHandler>
-           <Animated.View style={[styles.bottomSheet,{
+
+            
+            
+           <Animated.View  style={[styles.bottomSheet,{
                transform:[{translateY:translationY}]
-           }]}>
-               <Text style={{alignSelf:'center'}}> Bottom Action Sheet</Text>
+           },
+           ]}>
+            <TouchableOpacity onPress={()=>handleClose()}> 
+                <Text style={{alignSelf:'center'}}> Bottom Action Sheet</Text>
+            </TouchableOpacity>
            </Animated.View>
            </View>
+           </TouchableOpacity>
     );
 }
 
@@ -73,6 +82,7 @@ const styles=StyleSheet.create({
         backgroundColor:'white',
         borderRadius:25,
         marginHorizontal:10,
+       
     },
     image:{
         
